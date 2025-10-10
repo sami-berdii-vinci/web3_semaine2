@@ -9,7 +9,7 @@ export default function Home() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const host = import.meta.env.VITE_API_URL || 'http://unknown-api-url.com';
+  //const host = import.meta.env.VITE_API_URL || 'http://unknown-api-url.com';
 
   const sendApiRequestandHandleError = async (method: string = 'GET', path: string, body?: any) => {
     try {
