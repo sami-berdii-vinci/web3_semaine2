@@ -1,21 +1,29 @@
-const fs = require('fs');
-const path = require('path');
+import { PrismaClient } from '@prisma/client';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const prisma = new PrismaClient();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const EXPENSES_FILE_PATH = path.join(__dirname, '../data/expenses.json');
 const EXPENSES_INIT_FILE_PATH = path.join(__dirname, '../data/expenses.init.json');
 
-function getAllExpenses() {
-  const data = fs.readFileSync(EXPENSES_FILE_PATH, 'utf8');
-  return JSON.parse(data);
+async function getAllExpenses() {
+  const data = await prisma.expense.findMany();
+  return data;
 }
 
-function addExpense(expense) {
-  const expenses = getAllExpenses();
-  expenses.push(expense);
-
-  const updatedExpenses = JSON.stringify(expenses, null, 2);
-  fs.writeFileSync(EXPENSES_FILE_PATH, updatedExpenses);
-  return expense;
+async function addExpense(expense) {
+  const newExpense = await prisma.expense.create({
+    data: {
+      description: expense.description,
+      payer: expense.payer,
+      amount: expense.amount
+    }
+  });
+  return newExpense;
 }
 
 function resetExpenses() {
@@ -24,8 +32,4 @@ function resetExpenses() {
   return JSON.parse(initData);
 }
 
-module.exports = {
-  getAllExpenses,
-  addExpense,
-  resetExpenses,
-};
+export { getAllExpenses, addExpense, resetExpenses };
