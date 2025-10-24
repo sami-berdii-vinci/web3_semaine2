@@ -17,7 +17,7 @@ export default function ExpenseItem({ expense }: ExpenseItemProps) {
         <strong>Payer:</strong> {expense.payer}
       </div>
       <div>
-        <strong>Amount:</strong> ${expense.amount.toFixed(2)}
+        <strong>Amount:</strong> ${expense.amount}
       </div>
     </div>
   );
